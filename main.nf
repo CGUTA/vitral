@@ -1,11 +1,11 @@
 
-raw_file = Channel.fromPath("${params.input_file}")
+raw_file = Channel.fromPath("${params.input}")
 	.map { file -> tuple(file.baseName, file) }
 
 process kmean_colors {
     conda "scipy scikit-learn opencv"
 
-	publishDir "$baseDir/im_out/", mode: 'copy', saveAs: { filename -> "${datasetID}_${params.colors_num}_colors_$filename" }
+    publishDir "${params.out}", mode: 'copy', saveAs: { filename -> "${datasetID}_${params.colors_number}_colors_$filename" }
     
     input:
     set datasetID, file(input_image) from raw_file
