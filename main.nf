@@ -5,7 +5,7 @@ raw_file = Channel.fromPath("${params.input}")
 process kmean_colors {
     conda "scipy scikit-learn opencv"
 
-    publishDir "${params.out}", mode: 'copy', saveAs: { filename -> "${datasetID}_${params.colors_number}_colors_$filename" }
+    publishDir "${params.out}", mode: 'copy', saveAs: { filename -> "${datasetID}_${params.colors}_colors_$filename" }
     
     input:
     set datasetID, file(input_image) from raw_file
@@ -28,7 +28,7 @@ process kmean_colors {
     def our_flatten(arr):
         return(arr.reshape(-1, arr.shape[-1]))
         
-    image_kmeans = KMeans(n_clusters=$params.colors_num, random_state=0).fit(our_flatten(image_hsv))
+    image_kmeans = KMeans(n_clusters=$params.colors, random_state=0).fit(our_flatten(image_hsv))
         
     counter = 0
     for i in range(len(image_hsv)):
